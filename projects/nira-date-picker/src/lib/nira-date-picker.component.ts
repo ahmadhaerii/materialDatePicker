@@ -16,38 +16,29 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 @Component({
   selector: 'lib-nira-date-picker',
   template: `
-    <button
-      [disabled]="disable"
-      style="background: none; border: none; width: 100%; padding: 0px"
-      mat-button
-      matSuffix
-      mat-icon-button
-      aria-label="Clear"
+    <mat-form-field
       (click)="onShowCalendar()"
+      class="datepicker-form-field"
+      appearance="outline"
+      style="justify-content: center;"
     >
-      <mat-form-field
-        class="datepicker-form-field"
-        appearance="outline"
-        style="width: 100%; justify-content: center"
+      <mat-label style="font-size: 15px">{{ label }}</mat-label>
+      <input
+        disabled="{{ disable }}"
+        aria-label="Date Picker"
+        matInput
+        [ngModel]="result.replaceAll('-', '/')"
+        (ngModelChange)="result = $event"
+        style="text-align: center; width: 85%; height: 24px; direction: ltr"
+        (ngModelChange)="ChangeDate($event)"
+      />
+      <mat-icon
+        class="text-colors"
+        style="display: none; margin-top: -3px"
+        [ngStyle]="{ color: disable ? 'gray' : '#3c096c' }"
+        >date_range</mat-icon
       >
-        <mat-label style="font-size: 15px">{{ label }}</mat-label>
-        <input
-          disabled="{{ disable }}"
-          aria-label="Date Picker"
-          matInput
-          [ngModel]="result.replaceAll('-', '/')"
-          (ngModelChange)="result = $event"
-          style="text-align: center; width: 85%; height: 24px; direction: ltr"
-          (ngModelChange)="ChangeDate($event)"
-        />
-        <mat-icon
-          class="text-colors"
-          style="display: none; margin-top: -3px"
-          [ngStyle]="{ color: disable ? 'gray' : 'var(--textColor)' }"
-          >date_range</mat-icon
-        >
-      </mat-form-field>
-    </button>
+    </mat-form-field>
 
     <ng-template class="dialog" #dpDialog>
       <div class="dp-header">
@@ -65,26 +56,19 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
             ></span>
           </div>
         </div>
-        <button
-          class="month-btn"
-          mat-button
-          matSuffix
-          mat-icon-button
-          style="margin: 0px 20px 20px 0px"
-          aria-label="Clear"
+
+        <mat-icon
+          style="vertical-align: middle;"
           (click)="updateMonth($event, 'dec')"
+          class="month-btn"
+          >keyboard_arrow_left</mat-icon
         >
-          <mat-icon style="vertical-align: middle; padding-top: 1px"
-            >keyboard_arrow_left</mat-icon
-          >
-        </button>
+
         <button
           [disabled]="disable"
           mat-button
           matSuffix
-          mat-icon-button
           aria-label="Clear"
-          style="background: none; border: none"
           (click)="yearSelector()"
         >
           {{ year }}
@@ -92,19 +76,12 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
         <label style="color: gray; font-weight: 500; font-size: 20px">
           {{ months[month] }}</label
         >
-        <button
+        <mat-icon
           class="month-btn"
-          mat-button
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          style="margin: 0px 0px 20px 20px"
+          style="vertical-align: middle"
           (click)="updateMonth($event, 'inc')"
+          >keyboard_arrow_right</mat-icon
         >
-          <mat-icon style="vertical-align: middle; padding-top: 1px"
-            >keyboard_arrow_right</mat-icon
-          >
-        </button>
       </div>
       <div mat-dialog-content style="min-height: 282px">
         <div *ngIf="calendarType == 'en'" class="week-container">
@@ -179,7 +156,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
         </div>
       </div>
       <hr class="line-hr" />
-      <div class="dp-header" mat-dialog-footer>
+      <div class="dp-footer" mat-dialog-footer>
         <button class="footer-btn" (click)="updateMonth($event, 'today')">
           {{ calendarType == 'en' ? 'Today' : 'امروز' }}
         </button>
@@ -276,7 +253,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 .grid-container {
   display: grid;
   grid-template-columns: auto auto;
-  background-color: var(--backgroundColor);
+  background-color: #7b2cbf;
   padding: 10px;
 }
 
@@ -289,12 +266,12 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 }
 
 .month-container {
-  background: var(--backgroundColor);
+  
   border-top-left-radius: 0.25em;
   border-top-right-radius: 0.25em;
   display: grid;
   grid-template-columns: auto auto;
-  background-color: var(--backgroundColor);
+  background-color: #7b2cbf;
   padding: 10px;
 }
 
@@ -302,7 +279,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto;
   grid-gap: 15px;
-  color: var(--backgroundColor);
+  color: #7b2cbf;
 }
 
 
@@ -334,17 +311,17 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   border-radius: 5px;
   height: 45px;
   padding-top: 3px;
-  color: red !important;
+  color: red;
 }
 
 .example-full-width {
   width: 100%;
-  color: var(--textColor);
+  color: #3c096c;
   font-size: 15px;
 }
 
 .day.isSelected {
-  background: var(--backgroundColor);
+  background: #7b2cbf;
   border-radius: 5px;
   width: 45px;
   height: 45px;
@@ -353,9 +330,9 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 }
 
 .day:hover {
-  border: 1px solid var(--backgroundColor);
+  border: 1px solid #7b2cbf;
   background: none;
-  color: var(--textColor) ;
+  color:#3c096c ;
   border-radius: 5px;
   width: 45px;
   height: 45px;
@@ -373,7 +350,13 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 .dp-header {
   text-align: center;
   justify-content: center;
+  margin-top:25px;
 }
+.dp-footer {
+  text-align: center;
+  justify-content: center;
+}
+
 
 .year-header {
   text-align: center;
@@ -407,7 +390,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 .footer-btn {
   border: 2px solid #fff;
-  background-color: var(--commonColor);
+  background-color: #5a189a;
   color: #fff;
   border-radius: 5px;
   width: 40%;
@@ -419,8 +402,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 .footer-btn:hover {
   border-radius: 5px;
-  border: 2px solid var(--commonColor);
-  color: var(--commonColor);
+  border: 2px solid #5a189a;
+  color: #5a189a;
   background-color: transparent;
   width: 40%;
   font-size: 16px;
@@ -432,20 +415,27 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 .dp-footer {
   text-align: center;
   justify-content: center;
-  vertical-align: middle;
+
 }
 
 .month-btn {
   background: none;
-  border: 1px solid var(--buttonColor);
-  color: var(--textColor);
+  // border: 1px solid var(--buttonColor);
+  color: #3c096c;
+  border-radius:100%;
+  padding:8px;
+  cursor:pointer
+  
 }
 
 .month-btn:hover {
-  background: none;
-  border: 1px solid #ffffff;
-  background-color: var(--backgroundColor);
+  
+  // border: 1px solid #ffffff;
+  background-color:#7b2cbf;
   color: #fff;
+  padding:8px;
+ 
+  
 }
 
 .decade {
@@ -453,7 +443,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   text-align: center;
   border: 1px #c4c4c4 solid;
   border-radius: 5px;
-  color: var(--textColor);
+  color: #3c096c;
 }
 
 .decade-container {
@@ -479,7 +469,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   margin-bottom: 10px;
   padding-top: 10px;
   border: 1px #d3d3d3 solid;
-  color: var(--textColor);
+  color: #3c096c;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -489,7 +479,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   padding-top: 10px;
   border: 1px #d3d3d3 solid;
   background-color: #e7e7e7;
-  color: var(--textColor);
+  color: #3c096c;
   border-radius: 5px;
   cursor: pointer;
 }
@@ -534,24 +524,24 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 }
 
 .dividing-line {
-  background-color: var(--commonColor);
+  background-color: #5a189a;
 }
 
 .days {
-  border: 1px solid var(--commonColor);
+  border: 1px solid #5a189a;
   font-size: 9px;
 }
 
 .text-colors {
-  color: var(--textColor);
+  color: var(#3c096c);
 }
 
 .line-hr {
-  background-color: var(--commonColor);
+  background-color: #5a189a;
 }
 
 .best-fare-label {
-  border-top: 1px solid var(--commonColor);
+  border-top: 1px solid #5a189a;
 }
 
 .disabled {
@@ -618,15 +608,15 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
     'بهمن',
     'اسفند',
   ];
-  organizationColor = {
-    textColor: '#A71E34',
-    buttonColor: '#BD1F36',
-    backgroundColor: '#B21E35',
-    commonColor: '#85182A',
-    tableColor: '#F05265',
-    profileColor: '#c2113a',
-    Color: 'Red',
-  };
+  // organizationColor = {
+  //   textColor: '#A71E34',
+  //   buttonColor: '#BD1F36',
+  //   backgroundColor: '#B21E35',
+  //   commonColor: '#85182A',
+  //   tableColor: '#F05265',
+  //   profileColor: '#c2113a',
+  //   Color: 'Red',
+  // };
 
   selectedDay?: number;
   showCalendar: boolean = false;
@@ -877,7 +867,10 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
 
   onShowCalendar() {
     const dialogConfig = new MatDialogConfig();
-    this.dialogRef = this.dialog.open(this.dpDialog, { maxWidth: '100vw' });
+    this.dialogRef = this.dialog.open(this.dpDialog, {
+      maxWidth: '100vw',
+      autoFocus: false,
+    });
   }
 
   public setDefaultValues() {
