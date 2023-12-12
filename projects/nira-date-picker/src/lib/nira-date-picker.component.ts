@@ -20,7 +20,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
       (click)="onShowCalendar()"
       class="datepicker-form-field"
       appearance="outline"
-      style="justify-content: center;"
+      style="justify-content: center;  margin-top:10px"
     >
       <mat-label style="font-size: 15px">{{ label }}</mat-label>
       <input
@@ -29,12 +29,12 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
         matInput
         [ngModel]="result.replaceAll('-', '/')"
         (ngModelChange)="result = $event"
-        style="text-align: center; width: 85%; height: 24px; direction: ltr"
+        style="text-align: center; width: 85%; height: 24px; direction: ltr;"
         (ngModelChange)="ChangeDate($event)"
       />
       <mat-icon
         class="text-colors"
-        style="display: none; margin-top: -3px"
+        style="display: none; margin-top: -3px;"
         [ngStyle]="{ color: disable ? 'gray' : '#3c096c' }"
         >date_range</mat-icon
       >
@@ -42,23 +42,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
     <ng-template class="dialog" #dpDialog>
       <div class="dp-header">
-        <div>
-          <div
-            *ngIf="loadingPrice"
-            class="text-colors"
-            style="margin-bottom: 15px"
-          >
-            ...در حال بارگذاری قیمت ها
-            <span
-              class="spinner-grow spinner-grow-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
-          </div>
-        </div>
-
         <mat-icon
-          style="vertical-align: middle;"
+          style="vertical-align: middle; "
           (click)="updateMonth($event, 'dec')"
           class="month-btn"
           >keyboard_arrow_left</mat-icon
@@ -73,88 +58,82 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
         >
           {{ year }}
         </button>
-        <label style="color: gray; font-weight: 500; font-size: 20px">
+        <label
+          style=" font-weight: 500;
+           font-size:15px ;font-family:Vazirmatn;
+            padding-top:15px"
+        >
           {{ months[month] }}</label
         >
         <mat-icon
           class="month-btn"
-          style="vertical-align: middle"
+          style="vertical-align: middle;margin-left:15px"
           (click)="updateMonth($event, 'inc')"
           >keyboard_arrow_right</mat-icon
         >
       </div>
-      <div mat-dialog-content style="min-height: 282px">
-        <div *ngIf="calendarType == 'en'" class="week-container">
-          <span class="week day-of-week">Sun</span>
-          <span class="week day-of-week">Mon</span>
-          <span class="week day-of-week">Tue</span>
-          <span class="week day-of-week">Wed</span>
-          <span class="week day-of-week">Thu</span>
-          <span class="week day-of-week">Fri</span>
-          <span class="week day-of-week">Sat</span>
-        </div>
-        <div *ngIf="calendarType == 'fa'" class="week-container">
-          <span class="week day-of-week">ش</span>
-          <span class="week day-of-week">ی</span>
-          <span class="week day-of-week">د</span>
-          <span class="week day-of-week">س</span>
-          <span class="week day-of-week">چ</span>
-          <span class="week day-of-week">پ</span>
-          <span class="week day-of-week">ج</span>
-        </div>
 
-        <hr class="line-hr" />
-
-        <div *ngIf="calendarType == 'en'" class="Grid Grid--wrap day-container">
-          <span
-            *ngFor="let day of days"
-            class="day Btn--pointer"
-            [ngClass]="{
-              isSelected: getSelectedDay(day, month),
-              disabled: day == 0
-            }"
-            [ngStyle]="
-              activeDay(day.toString())
-                ? { color: 'black', 'font-weight': '500' }
-                : { color: 'gray' }
-            "
-            (click)="selectDay(day, '')"
-          >
-            <ng-container *ngIf="day !== 0"> {{ day }}</ng-container>
-            <br />
-            <div>
-              <label class="best-fare-label" style="font-size: 9px">
-                {{ this.findBestFare(year, month, day) }}
-              </label>
-            </div>
-          </span>
-        </div>
-        <div *ngIf="calendarType == 'fa'" class="Grid Grid--wrap day-container">
-          <span
-            *ngFor="let day of days"
-            class="day Btn--pointer"
-            [ngClass]="{
-              isSelected: getSelectedDay(day, month),
-              disabled: day == 0
-            }"
-            [ngStyle]="
-              activeDay(day.toString())
-                ? { color: 'black', 'font-weight': '500' }
-                : { color: 'gray' }
-            "
-            (click)="selectDay(day, '')"
-          >
-            <ng-container *ngIf="day !== 0"> {{ day }}</ng-container>
-            <br />
-            <div>
-              <label class="best-fare-label" style="font-size: 9px">
-                {{ this.findBestFare(year, month, day) }}
-              </label>
-            </div>
-          </span>
-          <br />
-        </div>
+      <div *ngIf="calendarType == 'en'" class="week-container">
+        <span class="week day-of-week">Sun</span>
+        <span class="week day-of-week">Mon</span>
+        <span class="week day-of-week">Tue</span>
+        <span class="week day-of-week">Wed</span>
+        <span class="week day-of-week">Thu</span>
+        <span class="week day-of-week">Fri</span>
+        <span class="week day-of-week">Sat</span>
       </div>
+      <div *ngIf="calendarType == 'fa'" class="week-container">
+        <span class="week day-of-week">ش</span>
+        <span class="week day-of-week">ی</span>
+        <span class="week day-of-week">د</span>
+        <span class="week day-of-week">س</span>
+        <span class="week day-of-week">چ</span>
+        <span class="week day-of-week">پ</span>
+        <span class="week day-of-week">ج</span>
+      </div>
+
+      <hr class="line-hr" />
+
+      <div *ngIf="calendarType == 'en'" class="Grid Grid--wrap day-container">
+        <span
+          *ngFor="let day of days"
+          class="day Btn--pointer"
+          [ngClass]="{
+            isSelected: getSelectedDay(day, month),
+            disabled: day == 0
+          }"
+          [ngStyle]="
+            activeDay(day.toString())
+              ? { color: 'black', 'font-weight': '500' }
+              : { color: 'gray' }
+          "
+          (click)="selectDay(day, '')"
+        >
+          <ng-container *ngIf="day !== 0"> {{ day }}</ng-container>
+          <br />
+        </span>
+      </div>
+      <div *ngIf="calendarType == 'fa'" class="Grid Grid--wrap day-container">
+        <span
+          *ngFor="let day of days"
+          class="day Btn--pointer"
+          [ngClass]="{
+            isSelected: getSelectedDay(day, month),
+            disabled: day == 0
+          }"
+          [ngStyle]="
+            activeDay(day.toString())
+              ? { color: 'black', 'font-weight': '500' }
+              : { color: 'gray' }
+          "
+          (click)="selectDay(day, '')"
+        >
+          <ng-container *ngIf="day !== 0"> {{ day }}</ng-container>
+          <br />
+        </span>
+        <br />
+      </div>
+
       <hr class="line-hr" />
       <div class="dp-footer" mat-dialog-footer>
         <button class="footer-btn" (click)="updateMonth($event, 'today')">
@@ -166,23 +145,21 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
       </div>
     </ng-template>
 
-    <ng-template id="yearDialog" class="dialog" #yearDialog>
+    <ng-template id="decadeDialog" class="dialog" #decadeDialog>
       <div class="container">
         <div class="row">
           <div class="col">
-            <button
-              class="btn-simple"
-              mat-icon-button
-              style="float: right"
+            <mat-icon
+              style="float: right ; margin-top:13px"
+              class="month-btn"
               (click)="backButton()"
+              >arrow_forward</mat-icon
             >
-              <mat-icon>arrow_forward</mat-icon>
-            </button>
+
             <label
               class="text-colors"
-              style="float: right; margin: 10px 8px 0px; font-size: 15px"
-            >
-              انتخاب سال
+              style="float: right; margin: 15px 8px 0px; font-size: 15px ; font-family:Vazirmatn"
+              >{{ decadeSelected ? 'انتخاب سال' : 'انتخاب دهه' }}
             </label>
           </div>
         </div>
@@ -201,7 +178,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
           >
             <br />
             <div>
-              <label style="font-size: 14px; padding: 2px ; color: red"
+              <label style="font-size: 14px; padding: 2px ; color: black"
                 >{{ decade }} - {{ decade + 10 }}</label
               >
             </div>
@@ -228,9 +205,20 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
     </ng-template>
   `,
   styles: `
+
 .root{
   display: flex; justify-content: center;
 }
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("./assets/fonts/Vazirmatn-Medium.ttf") format("woff2");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 .date {
   z-index: 10000;
   width: 255px;
@@ -246,6 +234,9 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   display: block;
 }
 
+::ng-deep .mat-dialog-container {
+    overflow-y: hidden !important;
+}
 .Btn--pointer{
   color:red
 }
@@ -259,7 +250,6 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 .grid-item {
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 20px;
   font-size: 30px;
   text-align: center;
@@ -284,11 +274,16 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 
 .day {
-  width: 2.5em;
+  border: 1px solid transparent;
+  width: 45px;
   padding: 0.625em 0;
   text-align: center;
-  padding: 0px;
-  position: relative;
+  padding: 0px; 
+  color: black;
+  border-radius: 5px;
+  height: 45px;
+  line-height:45px
+
 }
 
 .day-container {
@@ -296,22 +291,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   grid-template-columns: auto auto auto auto auto auto auto;
   grid-row-gap: 1px;
   grid-column-gap: 1px;
-}
 
-.day {
-  border-radius: 100%;
-  height: 45px;
-  width: 45px;
-  padding-top: 3px;
-  color: black;
-}
-
-.day:hover {
-  background: #fdfdfd;
-  border-radius: 5px;
-  height: 45px;
-  padding-top: 3px;
-  color: red;
 }
 
 .example-full-width {
@@ -322,21 +302,21 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 .day.isSelected {
   background: #7b2cbf;
+  border: 1px solid transparent;
   border-radius: 5px;
   width: 45px;
   height: 45px;
-  padding-top: 3px;
   color: white !important;
 }
 
 .day:hover {
   border: 1px solid #7b2cbf;
   background: none;
-  color:#3c096c ;
+  color:#3c096c !important;
   border-radius: 5px;
   width: 45px;
   height: 45px;
-  padding-top: 3px;
+  
 }
 
 .day.isDeactive {
@@ -350,7 +330,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 .dp-header {
   text-align: center;
   justify-content: center;
-  margin-top:25px;
+  margin-top:10px !important;
+  margin-bottom:15px
 }
 .dp-footer {
   text-align: center;
@@ -398,6 +379,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   padding: 5px;
   padding-top: 8px;
   margin: 5px;
+  font-family:Vazirmatn
 }
 
 .footer-btn:hover {
@@ -413,27 +395,24 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 }
 
 .dp-footer {
-  text-align: center;
-  justify-content: center;
+ margin-bottom:15px;
+justify-content: center;
 
 }
 
 .month-btn {
   background: none;
-  // border: 1px solid var(--buttonColor);
   color: #3c096c;
-  border-radius:100%;
-  padding:8px;
+  border-radius:100%; 
   cursor:pointer
   
 }
 
 .month-btn:hover {
-  
-  // border: 1px solid #ffffff;
   background-color:#7b2cbf;
   color: #fff;
-  padding:8px;
+ 
+
  
   
 }
@@ -441,9 +420,10 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 .decade {
   padding: 4px;
   text-align: center;
-  border: 1px #c4c4c4 solid;
+  border: 1px solid #c4c4c4 !important ;
   border-radius: 5px;
-  color: #3c096c;
+  color: black;
+  padding-bottom:20px
 }
 
 .decade-container {
@@ -463,6 +443,9 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 .decade:hover {
   background: #ffffff;
+  border: 1px solid #7b2cbf;
+  
+  color:#3c096c !important;
 }
 
 .year-button {
@@ -519,8 +502,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 .btn-simple {
   background-color: transparent;
   border: none;
-  border-radius: 2%;
-  padding: 7px 5px 0px;
+  border-radius: 100%;
+ 
 }
 
 .dividing-line {
@@ -540,23 +523,21 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
   background-color: #5a189a;
 }
 
-.best-fare-label {
-  border-top: 1px solid #5a189a;
-}
-
 .disabled {
   pointer-events: none;
 }
 
 .day-of-week {
   text-align: center;
+font-family:  Vazirmatn;
+
 }
 
 .mat-form-field-wrapper {
   width: 100%;
 }
 
-.mat-form-field-appearance-outline .mat-form-field-infix {
+.mat-form-field-appearance-outline .mat-form-field-infix {f
   padding: 1em 0 1em 0;
   display: flex !important;
 }`,
@@ -571,11 +552,12 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
   @Input() defaultDate = '';
   @Input() changableYears: boolean = false;
   @ViewChild('dpDialog') dpDialog: any;
-  @ViewChild('yearDialog') yearDialog: any;
+  @ViewChild('decadeDialog') decadeDialog: any;
 
   @Output() onUpdate: EventEmitter<any> = new EventEmitter<any>();
 
   dialogRef: any;
+  decadeDialogRef: any;
 
   loadingPrice: boolean = false;
 
@@ -589,6 +571,7 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
   public decadeYears: any = [];
   public decadeSelected = false;
   public month!: number;
+
   year!: number;
   days: number[] = [];
   public fare = 200;
@@ -608,16 +591,6 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
     'بهمن',
     'اسفند',
   ];
-  // organizationColor = {
-  //   textColor: '#A71E34',
-  //   buttonColor: '#BD1F36',
-  //   backgroundColor: '#B21E35',
-  //   commonColor: '#85182A',
-  //   tableColor: '#F05265',
-  //   profileColor: '#c2113a',
-  //   Color: 'Red',
-  // };
-
   selectedDay?: number;
   showCalendar: boolean = false;
   result: string = '';
@@ -633,8 +606,6 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
   }
   ngOnInit(): void {
     this.setDefaultValues();
-    // if (this.config.currentConfig)
-    //   this.organizationColor = this.config.currentConfig.organizationColor;
   }
   ngDoCheck() {
     if (this.bestFares !== undefined) {
@@ -687,11 +658,10 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
 
     this.yearSelectorVisible = !this.yearSelectorVisible;
     this.dialogRef.close();
-    this.dialogRef = this.dialog.open(this.yearDialog);
+    this.decadeDialogRef = this.dialog.open(this.decadeDialog);
   }
 
   public updateYear(e?: Event, type?: string) {
-    // if (e) e.stopPropagation();
     if (type === 'dec') this.year--;
     this.days = [];
 
@@ -702,6 +672,13 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
   selectYear(year: any) {
     try {
       this.decadeSelected = false;
+
+      this.decadeDialogRef.close();
+      this.dialogRef = this.dialog.open(this.dpDialog, {
+        maxWidth: '100vw',
+        autoFocus: false,
+      });
+      console.log('sssssssssssss');
       const pad = (s: any) => (s.length < 2 ? 0 + s : s);
       this.year = year;
       this.date = new Date(
@@ -709,31 +686,30 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
         this.month,
         Number(this.getCurrentDayShamsi())
       );
-      if (!this.disable)
+
+      this.dialogRef = this.dialog.open(this.dpDialog, {
+        maxWidth: '100vw',
+        autoFocus: false,
+      });
+      if (!this.disable) {
         this.result = `${year}-${pad(this.month + 1 + '')}-${pad(
           this.getCurrentDayShamsi() + ''
         )}`;
-      else this.result = '';
+      } else this.result = '';
 
       this.onUpdate.emit({ selected: this.result });
-      this.dialogRef.close();
-
-      this.dialogRef = this.dialog.open(this.dpDialog);
-    } catch (err) {
-      // this.Console.LOG(5, 'selectyear' + err);
-    }
+    } catch (err) {}
   }
 
   selectDecade(decade: any) {
     try {
       this.decadeYears = [];
       this.decadeSelected = true;
+
       for (let i = decade; i < decade + 10; i++) {
         this.decadeYears.push(i);
       }
-    } catch (err) {
-      // this.Console.LOG(5, 'selectyear' + err);
-    }
+    } catch (err) {}
   }
 
   public getSelectedDay(day: number, month: number): boolean {
@@ -748,13 +724,11 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
   }
 
   public getCurrentMonthShamsi(): number {
-    // var ndt: NDateTime = new NDateTime();
     let mon = this.niraService.getShamsiMon().valueOf();
     return mon;
   }
 
   public getCurrentMonthMiladi(): Number {
-    // var ndt: NDateTime = new NDateTime();
     let mon = this.niraService.getMiladiMon();
     return mon;
   }
@@ -817,13 +791,13 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
       let date = new Date(this.year, this.month, 0);
       const days = date.getDate();
       const day = new Date(this.year, this.month, 1).getDay();
-      //const prefix = new Array(day);
+
       for (let i = 1; i < day; i++) this.days.push(0);
 
       for (let i = 1; i <= days; i++) this.days.push(i);
     } else if (this.calendarType == 'fa') {
       let Jstr = this.year + '/' + (this.month + 1).toString() + '/' + '01';
-      let Jdate = moment(Jstr, 'jYYYY/jM/jD'); // Parse a Jalaali date
+      let Jdate = moment(Jstr, 'jYYYY/jM/jD');
       const days = Jdate.jDaysInMonth();
       const day = Jdate.jDay();
       for (let i = 0; i < day; i++) this.days.push(0);
@@ -836,7 +810,6 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
   }
 
   selectDay(day: number, type: string) {
-    //  if (!day) return;
     try {
       const pad = (s: any) => (s.length < 2 ? 0 + s : s);
       this.date = new Date(this.year, this.month, day);
@@ -845,16 +818,12 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
         this.result = `${this.year}-${pad(this.month + 1 + '')}-${pad(
           day + ''
         )}`;
-        // const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
-        // this.result = p2e(this.result);
-        // let ndt = new NDateTime2();
+
         this.selectedDay = parseInt(this.result.substring(8));
       } else this.result = '';
       this.onUpdate.emit({ selected: this.result });
       if (type !== 'today') this.dialogRef.close();
-    } catch (err) {
-      // this.Console.LOG(5, err);
-    }
+    } catch (err) {}
   }
 
   public getToday() {
@@ -874,8 +843,6 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
   }
 
   public setDefaultValues() {
-    /// years config
-    // let ndt: NDateTime = new NDateTime();
     let currentYear = this.niraService.getShamsiYear();
     for (let i = Number(currentYear) - 100; i < Number(currentYear) + 20; i++) {
       if (i % 10 == 0) this.decades.push(i);
@@ -890,10 +857,8 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
       this.value = this.defaultDate;
       if (+year > 1500) {
         this.value = new Date(this.value).toLocaleDateString();
-        //this.date = new Date(this.value);
         this.calendarType = 'en';
       } else {
-        // let ndt: NDateTime = new NDateTime();
         this.niraService.setShamsiDateStr(this.value);
         let miladiStr = this.niraService.getMiladiDateStr();
         this.m = moment(miladiStr);
@@ -924,30 +889,6 @@ export class NiraDatePickerComponent implements OnChanges, OnInit, DoCheck {
 
     if (this.disable) this.value = '';
   }
-
-  findBestFare(year: number, month: number, day: number) {
-    // let ndt: NDateTime = new NDateTime();
-    let currentDate = '';
-    let ret = '';
-    //ndt.setMiladyYDM(this.year,month+1,day)
-    //currentDate = ndt.getMiladiDateStr();
-    if (this.calendarType == 'en') {
-      this.niraService.setMiladyYDM(year, month + 1, day);
-      currentDate = this.niraService.getMiladiDateStr();
-    }
-    if (this.calendarType == 'fa') {
-      this.niraService.setShamsiYDM(year, month + 1, day);
-      currentDate = this.niraService.getMiladiDateStr();
-    }
-    if (this.bestFares !== undefined && this.bestFares.length > 1) {
-      for (let i = 0; i < this.bestFares.length; i++) {
-        if (this.bestFares[i] && this.bestFares[i].Departure == currentDate)
-          ret = this.bestFares[i].TotalPrice;
-      }
-    }
-    return Number(ret) / 10 > 10 ? (Number(ret) / 10).toLocaleString() : '';
-  }
-
   activeDay(day: string) {
     let today;
     let currentMonth;
