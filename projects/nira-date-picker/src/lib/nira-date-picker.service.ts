@@ -1,19 +1,80 @@
-import { Injectable } from '@angular/core';
-import  moment from 'jalali-moment';
+import { Component, Injectable } from '@angular/core';
+import moment from 'jalali-moment';
+import { DatePickerDialogComponent } from './date-picker-dialog/date-picker-dialog.component';
 
+import { Subject } from 'rxjs';
+export interface DatePicker {
+  disable: boolean;
+  defaultDate: string;
+}
+
+export interface DatePickerResult {
+  result: string;
+  isChangeCalenderType: boolean;
+}
+export interface Month {
+  id: number;
+  name: string;
+}
+export interface Season {
+  id: number;
+  name: string;
+  months: Month[];
+}
 @Injectable({
   providedIn: 'root',
 })
 export class NiraDatePickerService {
-  // class NDateTimeComp {
-  // }
-
   internalDate: Date;
+
+  backToDataPickerDialog: Subject<boolean> = new Subject<boolean>();
+
+  private seasons: Season[] = [
+    {
+      id: 1,
+      name: 'بهار',
+      months: [
+        { id: 1, name: 'فروردین' },
+        { id: 2, name: 'اردیبهشت' },
+        { id: 3, name: 'خرداد' },
+      ],
+    },
+    {
+      id: 2,
+      name: 'تابستان',
+      months: [
+        { id: 4, name: 'تیر' },
+        { id: 5, name: 'مرداد' },
+        { id: 6, name: 'شهریور' },
+      ],
+    },
+    {
+      id: 3,
+      name: 'پاییز',
+      months: [
+        { id: 7, name: 'مهر' },
+        { id: 8, name: 'آبان' },
+        { id: 9, name: 'آذر' },
+      ],
+    },
+    {
+      id: 1,
+      name: 'زمستان',
+      months: [
+        { id: 1, name: 'دی' },
+        { id: 1, name: 'بهمن' },
+        { id: 1, name: 'اسفند' },
+      ],
+    },
+  ];
 
   constructor() {
     this.internalDate = new Date();
   }
 
+  get getSeasons(){
+    return this.seasons
+  }
   public setShamsiDateStr(shamsitStr: string) {
     let n = shamsitStr.search('/');
     if (n > 0) shamsitStr = shamsitStr.replace('/', '-');
@@ -25,7 +86,6 @@ export class NiraDatePickerService {
 
   public setMiladiDateStr(miladiStr: string) {
     this.internalDate = new Date(miladiStr);
-    //console.log(this.internalDate);
   }
 
   public setMiladiDateTimeStr(
@@ -33,10 +93,6 @@ export class NiraDatePickerService {
   ) {
     miladiStr = miladiStr.replace(' ', 'T');
     this.internalDate = new Date(miladiStr);
-
-    //let ret: NDateTime = new NDateTime();
-    //ret.internalDate = new Date(miladiStr);
-    //return ret;
   }
 
   public setTimeStr(timeStr: String) {
@@ -186,7 +242,7 @@ export class NiraDatePickerService {
     return day;
   }
 
-  public getTimeDiff(startDate:any, endDate:any) {
+  public getTimeDiff(startDate: any, endDate: any) {
     // let start: number = new Date(this.internalDate.getFullYear(), 0, 0).getTime();
     // let diff: number = this.internalDate.getTime() - start;
     // let oneDay = 1000 * 60 * 60 * 24;

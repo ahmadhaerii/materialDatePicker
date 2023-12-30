@@ -1,0 +1,17 @@
+<div class="container my-3">
+  <div
+    style="direction: rtl; display: flex; justify-content: center"
+    *ngFor="let season of seasons; let seasonIndex = index"
+    class="row my-1"
+  >
+    <div
+      style="direction: rtl"
+      class="col-3"
+      *ngFor="let month of seasons[seasonIndex].months; let monthIndex = index"
+    >
+      <button (click)="onSetMonth(month)" style="padding-inline-end: 0px" mat-button>
+        {{ month.name }}
+      </button>
+    </div>
+  </div>
+</div>
