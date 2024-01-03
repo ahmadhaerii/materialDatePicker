@@ -2,28 +2,23 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  EventEmitter,
-  HostBinding,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import moment from 'jalali-moment';
 import {
+  DatePickerDialogInputData,
   DatePickerResult,
   NiraDatePickerService,
+  Theme,
 } from './nira-date-picker.service';
-import {
-  MatDialog,
-  MatDialogConfig,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DatePickerDialogComponent } from './date-picker-dialog/date-picker-dialog.component';
 import { Subscription } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'lib-nira-date-picker',
@@ -34,22 +29,24 @@ export class NiraDatePickerComponent
   implements OnInit, AfterViewInit, OnDestroy
 {
   @Input() disable: boolean = false;
-  @Input() theme: string = '#5a189a';
   @Input() label: string = '';
-
   @Input() defaultDate = '';
   @Input() changableYears: boolean = false;
-
+  @Input() theme: Theme = {
+    primaryColor: '#ff0000',
+    primaryTextColor: 'white',
+    secondaryColor: '#0000ff',
+  };
   @ViewChild('decadeDialog') decadeDialog: any;
 
   @ViewChild('datePickerContainer')
   datePickerContainer?: ElementRef<HTMLDivElement>;
+  isTodaySub?: Subscription;
   result: string = '';
   public selectedMonth = 0;
   public calendarType = '';
 
   public years = [];
-  datePickerDialogSub?: Subscription;
 
   public decade: any;
   datePickerDialogRef: any;
@@ -62,15 +59,32 @@ export class NiraDatePickerComponent
   showCalendar: boolean = false;
 
   backgroundBtnColor: string = 'red';
-
+  datePickerFrmGrp: FormGroup = {} as FormGroup;
   constructor(
     private matDialog: MatDialog,
-    private niraService: NiraDatePickerService,
-
+    private niraService: NiraDatePickerService
   ) {}
 
   ngOnInit(): void {
- 
+    this.datePickerFrmGrp = new FormGroup({
+      datePickerFrmCtrl: new FormControl(null, Validators.required),
+    });
+    this.isTodaySub = this.niraService.isTodaySubj.subscribe(
+      (isToday: boolean) => {
+        if (isToday) {
+          const pad = (s: any) => (s.length < 2 ? 0 + s : s);
+          const currentDay = moment().jDate();
+          const currentMonth = moment().jMonth();
+          const currentYear = moment().jYear();
+          this.result = `${currentYear}-${pad(currentMonth + 1 + '')}-${pad(
+            currentDay + ''
+          )}`;
+          this.datePickerFrmGrp.setValue({
+            datePickerFrmCtrl: this.result,
+          });
+        }
+      }
+    );
     this.backgroundBtnColor = 'green';
   }
   ngAfterViewInit(): void {}
@@ -99,25 +113,34 @@ export class NiraDatePickerComponent
   }
 
   onShowCalendar() {
-    const dialogConfig = new MatDialogConfig();
+    const defaultDate = this.datePickerFrmGrp.get('datePickerFrmCtrl')?.value;
 
+    let isChangeCalenderType: boolean = false;
+    let dateDialogInputData: DatePickerDialogInputData = {
+      disable: this.disable,
+      defaultDate: defaultDate,
+      isChangeCalenderType: isChangeCalenderType,
+      theme: this.theme,
+    };
     let datePickerDialogRef = this.matDialog.open(DatePickerDialogComponent, {
-      data: { disable: this.disable, defaultDate: this.defaultDate },
+      data: dateDialogInputData,
       maxWidth: '100vw',
       autoFocus: false,
     });
     datePickerDialogRef.afterClosed().subscribe((data: DatePickerResult) => {
-      if(data){
-        this.result = data.result;
-        if (data.isChangeCalenderType) {
-          this.onShowCalendar();
+      if (data) {
+        if (data.isToday) {
+        } else {
+          this.result = data.result;
+          // this.result=this.result.replaceAll('-','/')
+          this.datePickerFrmGrp.setValue({
+            datePickerFrmCtrl: this.result,
+          });
         }
       }
-     
     });
   }
   ngOnDestroy(): void {
-    this.datePickerDialogSub?.unsubscribe();
+    this.isTodaySub?.unsubscribe();
   }
-  // this.niraService.setSelectedYear(year);
 }

@@ -1,118 +1,171 @@
-<div class="row header-wrapper  dp-header">
-  <div class="col-3"></div>
-  <div class="col-1 mt-1">
-    <mat-icon style="vertical-align: middle">keyboard_arrow_left</mat-icon>
-  </div>
+<div
+  style="overflow-x: hidden; padding: 20px; user-select: none"
+  [ngStyle]="{
+    '--primary-color': theme.primaryColor,
+    '--primary-text-color': theme.primaryTextColor,
+    '--today-color': theme.secondaryColor
+  }"
+  class="color"
+>
+  <div class="row justify-content-space-between mb-3">
+    <div class="col-3"></div>
+    <div class="col-1 mt-1" style="margin-inline: 0px; padding: 0px">
+      <mat-icon
+        class="header-month-arrow-icon"
+        (click)="goBeforeMonth()"
+        style="vertical-align: middle"
+        >keyboard_arrow_left</mat-icon
+      >
+    </div>
 
-  <div class="col-2 ">
-    <button
-      [disabled]="data.disable"
-      mat-button
-      matSuffix
-      aria-label="Clear"
-      (click)="onChangeYear()"
-      class="year-btn"
-    >
-      {{ year }}
-    </button>
-  </div>
-  <div class="col-2">
-    <button mat-button (click)="onChangeMonth()">
-      {{ months[month] }}
-    </button>
-  </div>
-  <div class="col-1 mt-1">
-    <mat-icon style="vertical-align: middle">keyboard_arrow_right</mat-icon>
-  </div>
-  <div class="col-3"></div>
-</div>
-<ng-template #yearDialog>
-  <form [formGroup]="yearFrmGrp">
-    <div class="row justify-content-center">
-      <div class="col-6 text-center set-year-input">
-        <input
-          formControlName="yearFrmCtrl"
-          style="width: 100%"
-          matInput
-          type="number"
-        />
-      </div>
-      <div class="col-3 set-year-btn-wrapper">
-        <button (click)="updateYearInDatePicker()" class="set-year-btn">
-          برو به سال
+    <div class="col-2" style="padding: 0">
+      <div>
+        <button
+          [disabled]="data.disable"
+          mat-button
+          matSuffix
+          aria-label="Clear"
+          (click)="onChangeYear()"
+          class="year-btn"
+        >
+          {{ year }}
         </button>
       </div>
     </div>
-  </form>
-</ng-template>
+    <div class="col-2" style="padding: 0; margin-inline-start: 5px">
+      <div>
+        <button
+          style="font-family: Vazirmatn; font-weight: 500; font-size: 12px"
+          mat-button
+          (click)="onChangeMonth()"
+        >
+          {{ months[month] }}
+        </button>
+      </div>
+    </div>
+    <div class="col-1 mt-1">
+      <mat-icon
+        (click)="goAfterMonth()"
+        class="header-month-arrow-icon"
+        style="vertical-align: middle"
+        >keyboard_arrow_right</mat-icon
+      >
+    </div>
+    <div class="col-2"></div>
+  </div>
+  <ng-template #yearDialog>
+    <div style="overflow-x: hidden; overflow-y: hidden; user-select: none">
+      <form [formGroup]="yearFrmGrp">
+        <div
+          class="row justify-content-center"
+          style="
+            margin-top: 20px;
+            padding-inline-start: 20px;
+            padding-inline-end: 20px;
+          "
+        >
+          <div class="col-6 text-center set-year-input">
+            <input
+              formControlName="yearFrmCtrl"
+              style="
+                width: 100%;
+                padding-top: 6px;
+                padding-bottom: 6px;
+                outline: none;
+              "
+              [ngStyle]="{ borderColor: theme.primaryColor }"
+              matInput
+              type="number"
+            />
+          </div>
+          <div class="col-3 set-year-btn-wrapper">
+            <button
+              mat-raised-button
+              [ngStyle]="{
+                color: theme.primaryTextColor,
+                backgroundColor: theme.primaryColor
+              }"
+              (click)="updateYearInDatePicker()"
+              class="set-year-btn"
+            >
+              برو به سال
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
 
-<div *ngIf="calendarType == 'en'" class="week-container">
-  <span class="week day-of-week">Sun</span>
-  <span class="week day-of-week">Mon</span>
-  <span class="week day-of-week">Tue</span>
-  <span class="week day-of-week">Wed</span>
-  <span class="week day-of-week">Thu</span>
-  <span class="week day-of-week">Fri</span>
-  <span class="week day-of-week">Sat</span>
-</div>
-<div *ngIf="calendarType == 'fa'" class="week-container">
-  <span class="week day-of-week">ش</span>
-  <span class="week day-of-week">ی</span>
-  <span class="week day-of-week">د</span>
-  <span class="week day-of-week">س</span>
-  <span class="week day-of-week">چ</span>
-  <span class="week day-of-week">پ</span>
-  <span class="week day-of-week">ج</span>
-</div>
-
-<hr class="line-hr" />
-
-<div *ngIf="calendarType == 'en'" class="Grid Grid--wrap day-container">
-  <span
-    *ngFor="let day of days"
-    class="day Btn--pointer"
-    [ngClass]="{
-      isSelected: getSelectedDay(day, month),
-      disabled: day == 0
-    }"
-    [ngStyle]="
-      activeDay(day.toString())
-        ? { color: 'black', 'font-weight': '500' }
-        : { color: 'gray' }
-    "
-    (click)="selectDay(day, '')"
-  >
-    <ng-container *ngIf="day !== 0"> {{ day }}</ng-container>
-    <br />
-  </span>
-</div>
-<div *ngIf="calendarType == 'fa'" class="Grid Grid--wrap day-container">
+  <div *ngIf="calendarType == 'en'" class="week-container">
+    <span class="week day-of-week">Sun</span>
+    <span class="week day-of-week">Mon</span>
+    <span class="week day-of-week">Tue</span>
+    <span class="week day-of-week">Wed</span>
+    <span class="week day-of-week">Thu</span>
+    <span class="week day-of-week">Fri</span>
+    <span class="week day-of-week">Sat</span>
+  </div>
   <div
-    class="day"
-    *ngFor="let day of days"
-    [ngClass]="{
-      isSelected: getSelectedDay(day, month),
-      disabled: day == 0
-    }"
-    [ngStyle]="
-      activeDay(day.toString())
-        ? { color: 'black', 'font-weight': '500' }
-        : { color: 'gray' }
-    "
-    (click)="selectDay(day, '')"
+    *ngIf="calendarType == 'fa'"
+    [ngStyle]="{ color: theme.primaryColor }"
+    class="week-container"
   >
-    <div *ngIf="day !== 0">{{ day }}</div>
+    <span class="week day-of-week">ش</span>
+    <span class="week day-of-week">ی</span>
+    <span class="week day-of-week">د</span>
+    <span class="week day-of-week">س</span>
+    <span class="week day-of-week">چ</span>
+    <span class="week day-of-week">پ</span>
+    <span class="week day-of-week">ج</span>
+  </div>
+
+  <hr class="line-hr" />
+
+  <div *ngIf="calendarType == 'en'" class="Grid Grid--wrap day-container">
+    <span
+      *ngFor="let day of days"
+      class="Btn--pointer"
+      [ngClass]="{
+        isSelected: getSelectedDay(day),
+        day: day != 0,
+        disappearedDay: day == 0
+      }"
+      (click)="selectDay(day, '')"
+    >
+      <ng-container *ngIf="day !== 0"> {{ day }}</ng-container>
+      <br />
+    </span>
+  </div>
+  <div *ngIf="calendarType == 'fa'" class="Grid Grid--wrap day-container">
+    <div
+      class="mahshid"
+      *ngFor="let day of days; let index = index"
+      [ngClass]="{
+        'selected-day': getSelectedDay(day),
+        'bigger-today': activeDay(day.toString()),
+        'smaller-today': !activeDay(day.toString()),
+        today: getCurrentDate(day),
+        isSelected: getSelectedDay(day),
+        day: day != 0,
+        disappearedDay: day == 0
+      }"
+      (click)="selectDay(day, '')"
+    >
+      <div *ngIf="day !== 0">
+        {{ day }}
+      </div>
+      <br />
+    </div>
     <br />
   </div>
-  <br />
-</div>
 
-<hr class="line-hr" />
-<div class="dp-footer" mat-dialog-footer>
-  <button (click)="selectDay(currentShamsiDay,'')"  class="footer-btn">
-    {{ calendarType == "en" ? "Today" : "امروز" }}
-  </button>
-  <button class="footer-btn" (click)="changeCalendarType()">
-    {{ calendarType == "en" ? "Shamsi" : "میلادی" }}
-  </button>
+  <hr class="line-hr" />
+  <div class="dp-footer" mat-dialog-footer>
+    <button (click)="goToToday()" class="footer-btn">
+      {{ calendarType == "en" ? "Today" : "امروز" }}
+    </button>
+    <button class="footer-btn" (click)="changeCalendarType()">
+      {{ calendarType == "en" ? "Shamsi" : "میلادی" }}
+    </button>
+  </div>
 </div>

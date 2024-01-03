@@ -14,16 +14,25 @@
   justify-content: space-around;
 }
 .dp-header {
-  text-align: center;
-  justify-content: center;
   margin-top: 10px !important;
   margin-bottom: 15px;
 }
+.header-month-arrow-icon {
+  background-color: transparent;
+  color: black;
+  border-radius: 100%;
+  cursor: pointer;
+}
+.header-month-arrow-icon:hover {
+  color: var(--primary-text-color);
+  background-color: var(--primary-color);
+}
+
 .week-container {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto;
   grid-gap: 15px;
-  color: #7b2cbf;
+  direction: rtl;
 }
 
 .line-hr {
@@ -38,6 +47,7 @@
   grid-template-columns: auto auto auto auto auto auto auto;
   grid-row-gap: 1px;
   grid-column-gap: 1px;
+  direction: rtl;
 }
 .day {
   border: 1px solid transparent;
@@ -49,31 +59,53 @@
   border-radius: 5px;
   height: 45px;
   line-height: 45px;
+  font-weight: 500;
 }
 
 .day:hover {
-  border: 1px solid #5a189a;
-  border-color: var(--bgBtn);
+  border: 1px solid;
+  border-color: var(--primary-color) !important;
   border-radius: 5px;
   width: 45px;
   height: 45px;
-  color: #5a189a !important;
   cursor: pointer;
 }
 .day.isSelected {
-  background: #7b2cbf;
-  border: 1px solid transparent;
+  border: 1px solid;
   border-radius: 5px;
   width: 45px;
   height: 45px;
-  color: white !important;
-  background-color: var(--bgBtn);
+}
+.disappeared-day {
+  border-color: transparent;
 }
 .day.isDeactive {
   color: rgb(209, 209, 209) !important;
 }
+.colors {
+  --primary-color: red;
+  --primary-text-color: white;
+  --today-color: blue;
+}
+.today {
+  color: var(--today-color) !important;
+  border-color: var(--today-color);
+}
+
+.selected-day {
+  background-color: var(--primary-color) !important;
+  color: var(--primary-text-color) !important;
+}
+.bigger-today {
+  color: black;
+}
+.smaller-today {
+  color: grey;
+}
 .footer-btn {
-  border: 2px solid;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  background-color: transparent;
   border-radius: 5px;
   width: 40%;
   font-size: 16px;
@@ -81,10 +113,11 @@
   padding-top: 8px;
   margin: 5px;
   font-family: Vazirmatn;
-  background-color: var(--bgBtn);
-  color: white;
+  font-weight: 500;
 }
 .footer-btn:hover {
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
   border-radius: 5px;
   border: 2px solid;
   width: 40%;
@@ -92,34 +125,22 @@
   padding: 5px;
   padding-top: 8px;
   margin: 5px;
-  color: var(--bgBtn);
-  background-color: transparent;
 }
 .dp-footer {
-  margin-bottom: 15px;
   justify-content: center;
   text-align: center;
 }
 .set-year-btn {
   font-size: 12px;
   width: 100%;
-  color: white;
-  border-color: transparent;
-  height: 25px;
-  background-color: #5a189a;
-  font-weight: 500;
+  border-radius: 0px !important;
+  font-weight: 600;
 }
-.set-year-btn:hover {
-  border-color: #7b2cbf;
-  color: #5a189a;
-  background-color: white;
-  font-weight: 500 !important;
-}
+
 .set-year-input {
   padding-inline: 0;
   margin-top: 10px;
   margin-bottom: 10px;
- 
 }
 .set-year-btn-wrapper {
   padding-inline: 0;

@@ -1,4 +1,5 @@
 <div class="root">
+  <form [formGroup]="datePickerFrmGrp">
   <mat-form-field
     (click)="onShowCalendar()"
     class="datepicker-form-field"
@@ -7,10 +8,11 @@
   >
     <mat-label style="font-size: 15px">{{ label }}</mat-label>
     <input
-      disabled="{{ disable }}"
+   
       aria-label="Date Picker"
       matInput
-      [ngModel]="result ? result.replaceAll('-', '/') : ''"
+      formControlName="datePickerFrmCtrl"
+      
       (ngModelChange)="result = $event"
       style="text-align: center; width: 85%; height: 24px; direction: ltr"
       (ngModelChange)="ChangeDate($event)"
@@ -23,4 +25,5 @@
       >date_range</mat-icon
     >
   </mat-form-field>
+</form>
 </div>
