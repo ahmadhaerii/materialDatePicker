@@ -389,7 +389,6 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
     }
 
     this.updateMonth(undefined, 'today');
-    // this.datePickerDialogRef.close(datePickerResult);
   }
   onChangeYear() {
     this.inputYearDialog = this.matDialog.open(this.yearDialog, {
