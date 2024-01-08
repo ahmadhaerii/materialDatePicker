@@ -1,14 +1,9 @@
 import {
   Component,
-  DoCheck,
-  EventEmitter,
   Inject,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
-  Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {
@@ -18,9 +13,10 @@ import {
 } from '@angular/material/dialog';
 import moment from 'jalali-moment';
 import {
-  DatePicker,
+  DatePickerDialogInputData,
   Month,
   NiraDatePickerService,
+  Theme,
 } from '../nira-date-picker.service';
 import { DatePickerResult } from '../nira-date-picker.service';
 import { Subscription } from 'rxjs';
@@ -32,15 +28,17 @@ import { MonthDialogComponent } from '../month-dialog/month-dialog.component';
   templateUrl: './date-picker-dialog.component.html',
   styleUrl: './date-picker-dialog.component.css',
 })
-export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
+export class DatePickerDialogComponent implements OnInit, OnDestroy {
   @Input() bestFares: { Departure: ''; TotalPrice: '' }[] = [
     { Departure: '', TotalPrice: '' },
   ];
   @ViewChild('yearDialog') yearDialog: any;
-
+  primaryColor: string = 'red';
+  theme: Theme = {} as Theme;
+  testColor: string = 'red';
   public month!: number;
   days: number[] = [];
-  public calendarType = 'fa';
+  public calendarType = '';
   public m = moment();
   year!: number;
   public date: Date = new Date();
@@ -49,6 +47,13 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
   isChangeCalenderType: boolean = false;
   public yearSelectorVisible = false;
   decadeDialogRef: any;
+  defaultDate?: number;
+  isToday: boolean = false;
+  isHoverToday: boolean = false;
+  isHoverCalenderType: boolean = false;
+  isHoverBackArrowIcon: boolean = false;
+  isHoverNextArrowIcon: boolean = false;
+
   public months: string[] = [
     'فروردین',
     'اردیبهشت',
@@ -71,17 +76,14 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
   inputYearDialog: any;
   constructor(
     public datePickerDialogRef: MatDialogRef<DatePickerDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DatePicker,
+    @Inject(MAT_DIALOG_DATA) public data: DatePickerDialogInputData,
     private niraService: NiraDatePickerService,
     private matDialog: MatDialog
   ) {}
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.bestFares.length < 1) this.loadingPrice = true;
-    else if (this.bestFares.length > 1) this.loadingPrice = false;
-  }
+
   ngOnInit(): void {
+    this.theme = this.data.theme;
     this.currentShamsiDay = this.m.jDate();
-    console.log('days:', this.days);
     this.yearFrmGrp = new FormGroup({
       yearFrmCtrl: new FormControl(null, Validators.required),
     });
@@ -89,42 +91,71 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public getCurrentDayShamsi(): Number {
-    //var ndt: NDateTime = new NDateTime();
     let day = this.niraService.getShamsiDay();
     return day;
   }
   updateYearInDatePicker() {
-    const pad = (s: any) => (s.length < 2 ? 0 + s : s);
-    let inputYear = this.yearFrmGrp.get('yearFrmCtrl')?.value;
     if (this.yearFrmGrp.get('yearFrmCtrl')?.valid) {
-      const pad = (s: any) => (s.length < 2 ? 0 + s : s);
       this.year = this.yearFrmGrp.get('yearFrmCtrl')?.value;
+      this.updateDays();
       this.inputYearDialog.close();
+    }
+  }
+  goBeforeMonth() {
+    if (this.month > 0) {
+      this.month--;
+    }
+    if (this.month === 0) {
+      this.month = 11;
+      this.year--;
+    }
+    this.updateDays();
+  }
+  goAfterMonth() {
+    if (this.month < 11) {
+      this.month++;
+      this.updateDays();
+    } else if (this.month === 11) {
+      this.month = 0;
+      this.year++;
+    }
+  }
+  updateDays() {
+    this.days = [];
+    let Jstr = this.year + '/' + (this.month + 1).toString() + '/' + '01';
+
+    let Jdate = moment(Jstr, 'jYYYY/jM/jD');
+    const days = Jdate.jDaysInMonth();
+    const day = Jdate.jDay();
+    for (let i = 0; i < day; i++) {
+      this.days.push(0);
+    }
+    for (let i = 1; i <= days; i++) {
+      this.days.push(i);
     }
   }
   selectDay(day: number, type: string) {
     try {
       const currentShamsiDay = Number(this.getCurrentDayShamsi());
-      const pad = (s: any) => (s.length < 2 ? 0 + s : s);
-      this.date = new Date(this.year, this.month, day);
+      if (day != 0) {
+        const pad = (s: any) => (s.length < 2 ? 0 + s : s);
+        this.date = new Date(this.year, this.month, day);
 
-      if (!this.data.disable) {
-        this.result = `${this.year}-${pad(this.month + 1 + '')}-${pad(
-          day + ''
-        )}`;
-      } else {
-        this.result = '';
-      }
-      if (currentShamsiDay < day) {
-        console.log(this.result);
+        if (!this.data.disable) {
+          this.result = `${this.year}-${pad(this.month + 1 + '')}-${pad(
+            day + ''
+          )}`;
+        } else {
+          this.result = '';
+        }
+
         let datePickerResult: DatePickerResult = {
           result: this.result,
           isChangeCalenderType: false,
+          isToday: this.isToday,
         };
-        this.datePickerDialogRef.close(datePickerResult);
+        if (type !== 'today') this.datePickerDialogRef.close(datePickerResult);
       }
-
-      // if (type !== 'today') this.datePickerDialogRef.close(this.result);
     } catch (err) {}
   }
 
@@ -151,10 +182,11 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
 
         this.selectDay(this.m.jDate(), 'today');
         this.days = [];
-      } else if (this.calendarType == 'en') {
+      } else {
         this.month = new Date().getMonth();
         this.year = new Date().getFullYear();
-        this.selectDay(new Date().getDate(), 'today');
+        let currentDate = new Date().getDate();
+        this.selectDay(currentDate, 'today');
         this.days = [];
       }
     }
@@ -182,7 +214,9 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
       let Jdate = moment(Jstr, 'jYYYY/jM/jD');
       const days = Jdate.jDaysInMonth();
       const day = Jdate.jDay();
-      for (let i = 0; i < day; i++) this.days.push(0);
+      for (let i = 0; i < day; i++) {
+        this.days.push(0);
+      }
 
       for (let i = 1; i <= days; i++) {
         if (this.bestFares != undefined) this.days.push(i);
@@ -190,21 +224,72 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
+  goToToday() {
+    this.niraService.isTodaySubj.next(true);
+    this.days = [];
+    this.isToday = true;
 
-  public getSelectedDay(day: number, month: number): boolean {
-    let isTheSame: boolean = false;
+    const currentDate = this.m.jDate();
+    const currentMonth = this.m.jMonth();
+    const currentYear = this.m.jYear();
+    let Jstr = currentYear + '/' + (currentMonth + 1).toString() + '/' + '01';
+    let Jdate = moment(Jstr, 'jYYYY/jM/jD');
+    const days = Jdate.jDaysInMonth();
+    const day = Jdate.jDay();
+    for (let i = 0; i < day; i++) {
+      this.days.push(0);
+    }
+    for (let i = 1; i <= days; i++) {
+      this.days.push(i);
+    }
+    this.year = currentYear;
+    this.month = currentMonth;
+    this.defaultDate = currentDate;
+  }
+
+  public getSelectedDay(day: number): boolean {
+    const currentDay = this.m.jDate();
+    const currentMonth = this.m.jMonth();
+    const currentYear = this.m.jYear();
+    if (this.data.defaultDate) {
+      if (this.isToday) {
+        this.defaultDate = currentDay;
+      } else {
+        this.defaultDate = +this.data.defaultDate.substring(8);
+      }
+      if (
+        this.defaultDate == day &&
+        this.month == currentMonth &&
+        this.year == currentYear
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  getCurrentDate(day: number): boolean {
+    const currentDate = this.m.jDate();
+    const currentYear = this.m.jYear();
+    const currentMonth = this.m.jMonth();
 
     if (
-      parseInt(this.result.substring(8)) == day &&
-      month + 1 == parseInt(this.result.substring(5, 7))
-    )
-      isTheSame = true;
-    return isTheSame;
+      day == currentDate &&
+      this.month == currentMonth &&
+      this.year == currentYear
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   activeDay(day: string) {
     let today;
     let currentMonth;
+    let currentYear = 0;
 
     if (this.calendarType == 'en') {
       let dt = new Date();
@@ -214,11 +299,15 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
       this.m = moment();
       today = this.m.jDate();
       currentMonth = this.m.jMonth();
+      currentYear = this.m.jYear();
     }
 
     if (
-      (Number(day) <= today && this.month == currentMonth) ||
-      this.month < currentMonth
+      (Number(day) <= today &&
+        this.month == currentMonth &&
+        this.year == currentYear) ||
+      (this.month < currentMonth && this.year == currentYear) ||
+      this.year < currentYear
     )
       return false;
     else return true;
@@ -254,11 +343,11 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
       if (this.value) this.date = new Date(this.value);
       this.month = this.date.getMonth();
       this.year = this.date.getFullYear();
-      if (this.value) this.selectDay(this.date.getDate(), '');
+      if (this.value) this.selectDay(this.date.getDate(), 'today');
     } else if (this.calendarType === 'fa') {
       this.month = this.m.jMonth();
       this.year = this.m.jYear();
-      if (this.value) this.selectDay(this.m.jDate(), '');
+      if (this.value) this.selectDay(this.m.jDate(), 'today');
     }
 
     this.updateMonth();
@@ -267,7 +356,6 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
   }
   public changeCalendarType() {
     this.calendarType = this.calendarType == 'en' ? 'fa' : 'en';
-
     if (this.calendarType == 'en') {
       this.months = [
         'January',
@@ -299,17 +387,14 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
         'اسفند',
       ];
     }
-    let datePickerResult: DatePickerResult = {
-      result: this.result,
-      isChangeCalenderType: true,
-    };
+
     this.updateMonth(undefined, 'today');
-    this.datePickerDialogRef.close(datePickerResult);
   }
   onChangeYear() {
     this.inputYearDialog = this.matDialog.open(this.yearDialog, {
       autoFocus: false,
-      width: 'auto',
+      minWidth: '25vw',
+      height: '100px',
     });
   }
 
@@ -317,10 +402,13 @@ export class DatePickerDialogComponent implements OnInit, OnChanges, OnDestroy {
     this.datePickerSub?.unsubscribe();
   }
   onChangeMonth() {
-    let monthDialogRef = this.matDialog.open(MonthDialogComponent);
+    let monthDialogRef = this.matDialog.open(MonthDialogComponent, {
+      autoFocus: false,
+    });
     monthDialogRef.afterClosed().subscribe((month: Month) => {
       if (month) {
         this.month = month.id - 1;
+        this.updateDays();
       }
     });
   }

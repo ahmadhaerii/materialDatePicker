@@ -1,8 +1,5 @@
-
-
-.root{
-  --bgBtn:#00ff00;
- 
+.root {
+  user-select: none;
 }
 
 @font-face {
@@ -13,12 +10,10 @@
   font-display: swap;
 }
 
-
 .date {
   z-index: 10000;
   width: 255px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   position: absolute;
   display: none;
   top: calc(100% + 10px);
@@ -29,163 +24,8 @@
   display: block;
 }
 
-::ng-deep .mat-dialog-container {
-    overflow-y: hidden !important;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: auto auto;
-  background-color: #7b2cbf;
-  padding: 10px;
-}
-
-.grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 20px;
-  font-size: 30px;
-  text-align: center;
-}
-
-.month-container {
-  border-top-left-radius: 0.25em;
-  border-top-right-radius: 0.25em;
-  display: grid;
-  grid-template-columns: auto auto;
-  background-color: #7b2cbf;
-  padding: 10px;
-}
-
-
-
-
-
-
-
-
-.example-full-width {
-  width: 100%;
-  color: #3c096c;
-  font-size: 15px;
-}
-
-
-
-.blue--dark {
-  color: #00457a;
-}
-
-
-
-.year-header {
-  text-align: center;
-  font-size: large;
-  justify-content: center;
-  vertical-align: middle;
-}
-
-.cancel-btn {
-  font-size: 36px;
-  border-radius: 100%;
-  background: none;
-  color: #DA1E37;
-  width: 40px;
-  height: 40px;
-  border: none;
-  padding: 0 !important;
-  line-height: 1.2;
-  display: flex;
-  justify-content: right !important;
-  text-align: end;
-}
-
-
-
-
-
-
-.year-button {
-  margin-bottom: 10px;
-  padding-top: 10px;
-  border: 1px #d3d3d3 solid;
-  color: #3c096c;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.year-button:hover {
-  margin-bottom: 10px;
-  padding-top: 10px;
-  border: 1px #d3d3d3 solid;
-  background-color: #e7e7e7;
-  color: #3c096c;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn {
-  border-radius: 6px;
-  text-align: center;
-  padding-bottom: 1px !important;
-  font-size: 14px;
-  transition: 0.3s;
-  border: 1px #b4b4b4 solid;
-  color: #505050;
-  background-color: #ffffff;
-}
-
-.btn:hover {
-  background-color: #cacaca;
-}
-
-::ng-deep .mat-form-field-infix {
-  width: 93px !important;
-  display: flex;
-}
-
-::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
-  height: 60px;
-}
-
-.datepicker-form-field > ::ng-deep .mat-form-field-infix {
-  display: flex;
-}
-
-::ng-deep .mat-card {
-  padding: 1px !important;
-}
-
 .btn-simple {
   background-color: transparent;
   border: none;
   border-radius: 100%;
- 
-}
-
-.dividing-line {
-  background-color: #5a189a;
-}
-
-.days {
-  border: 1px solid #5a189a;
-  font-size: 9px;
-}
-
-.text-colors {
-  color: var(#3c096c);
-}
-
-
-.disabled {
-  pointer-events: none;
-}
-
-
-.mat-form-field-wrapper {
-  width: 100%;
-}
-
-.mat-form-field-appearance-outline .mat-form-field-infix {
-  padding: 1em 0 1em 0;
-  display: flex !important;
 }

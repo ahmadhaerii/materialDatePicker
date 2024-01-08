@@ -3,15 +3,25 @@ import moment from 'jalali-moment';
 import { DatePickerDialogComponent } from './date-picker-dialog/date-picker-dialog.component';
 
 import { Subject } from 'rxjs';
-export interface DatePicker {
+
+export interface Theme{
+  primaryColor:string;
+  primaryTextColor:string;
+  secondaryColor:string
+}
+export interface DatePickerDialogInputData {
   disable: boolean;
   defaultDate: string;
+  isChangeCalenderType: boolean;
+  theme:Theme
 }
 
 export interface DatePickerResult {
   result: string;
   isChangeCalenderType: boolean;
+  isToday:boolean;
 }
+
 export interface Month {
   id: number;
   name: string;
@@ -25,6 +35,7 @@ export interface Season {
   providedIn: 'root',
 })
 export class NiraDatePickerService {
+  isTodaySubj: Subject<boolean> = new Subject<boolean>();
   internalDate: Date;
 
   backToDataPickerDialog: Subject<boolean> = new Subject<boolean>();
@@ -61,9 +72,9 @@ export class NiraDatePickerService {
       id: 1,
       name: 'زمستان',
       months: [
-        { id: 1, name: 'دی' },
-        { id: 1, name: 'بهمن' },
-        { id: 1, name: 'اسفند' },
+        { id: 10, name: 'دی' },
+        { id: 11, name: 'بهمن' },
+        { id: 12, name: 'اسفند' },
       ],
     },
   ];
@@ -72,8 +83,8 @@ export class NiraDatePickerService {
     this.internalDate = new Date();
   }
 
-  get getSeasons(){
-    return this.seasons
+  get getSeasons() {
+    return this.seasons;
   }
   public setShamsiDateStr(shamsitStr: string) {
     let n = shamsitStr.search('/');

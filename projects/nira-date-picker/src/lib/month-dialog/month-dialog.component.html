@@ -6,10 +6,14 @@
   >
     <div
       style="direction: rtl"
-      class="col-3"
+      class="col-4"
       *ngFor="let month of seasons[seasonIndex].months; let monthIndex = index"
     >
-      <button (click)="onSetMonth(month)" style="padding-inline-end: 0px" mat-button>
+      <button
+        (click)="onSetMonth(month)"
+        style="padding-inline-end: 0px; font-family: Vazirmatn"
+        mat-button
+      >
         {{ month.name }}
       </button>
     </div>

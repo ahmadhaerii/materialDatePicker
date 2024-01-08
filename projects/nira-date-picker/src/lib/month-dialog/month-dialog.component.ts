@@ -21,8 +21,6 @@ export class MonthDialogComponent implements OnInit {
     this.seasons = this.niraService.getSeasons;
   }
   onSetMonth(month: Month) {
-    console.log(month);
-
     this.MonthDialogRef.close(month ? month : undefined);
   }
 }
