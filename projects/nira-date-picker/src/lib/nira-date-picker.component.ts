@@ -31,8 +31,9 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./nira-date-picker.component.css'],
 })
 export class NiraDatePickerComponent
-  implements OnInit, AfterViewInit, OnDestroy
+  implements OnChanges, OnInit, AfterViewInit, OnDestroy
 {
+  @Input() isOpenCalender: boolean = false;
   @Input() disable: boolean = false;
   @Input() theme: string = '#5a189a';
   @Input() label: string = '';
@@ -65,12 +66,13 @@ export class NiraDatePickerComponent
 
   constructor(
     private matDialog: MatDialog,
-    private niraService: NiraDatePickerService,
-
+    private niraService: NiraDatePickerService
   ) {}
-
+  ngOnChanges(changes: SimpleChanges): void {}
   ngOnInit(): void {
- 
+    if (this.isOpenCalender) {
+      this.onShowCalendar();
+    }
     this.backgroundBtnColor = 'green';
   }
   ngAfterViewInit(): void {}
@@ -107,13 +109,12 @@ export class NiraDatePickerComponent
       autoFocus: false,
     });
     datePickerDialogRef.afterClosed().subscribe((data: DatePickerResult) => {
-      if(data){
+      if (data) {
         this.result = data.result;
         if (data.isChangeCalenderType) {
           this.onShowCalendar();
         }
       }
-     
     });
   }
   ngOnDestroy(): void {

@@ -1,3 +1,16 @@
 <div class="date-picker-lib">
-  <lib-nira-date-picker [label]="'pick a date'"></lib-nira-date-picker>
+  <mat-form-field
+    (click)="onShowCalendar()"
+    class="datepicker-form-field"
+    appearance="outline"
+    style="justify-content: center; margin-top: 10px"
+  >
+    <mat-label style="font-size: 15px">pick a date</mat-label>
+    <input
+      aria-label="Date Picker"
+      matInput
+      style="text-align: center; width: 85%; height: 24px; direction: ltr"
+    />
+  </mat-form-field>
+    <lib-nira-date-picker [isOpenCalender]="isOpenCalender" [label]="'pick a date'"></lib-nira-date-picker>
 </div>
