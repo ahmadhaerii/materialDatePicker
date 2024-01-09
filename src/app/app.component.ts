@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
 
   onShowCalendar() {
     this.isOpen = true;
-    console.log('isOpen:', this.isOpen);
   }
   getDefaultDate() {
     const defaultDate = this.datePickerFrmGrp.get('datePickerFrmCtrl')?.value;

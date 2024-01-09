@@ -80,7 +80,6 @@ export class NiraDatePickerComponent
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.isOpen);
     if (this.isOpen) {
       this.onShowCalendar();
     }
