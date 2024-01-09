@@ -1,25 +1,24 @@
 import { Component, Injectable } from '@angular/core';
 import moment from 'jalali-moment';
-import { DatePickerDialogComponent } from './date-picker-dialog/date-picker-dialog.component';
 
 import { Subject } from 'rxjs';
 
-export interface Theme{
-  primaryColor:string;
-  primaryTextColor:string;
-  secondaryColor:string
+export interface Theme {
+  primaryColor: string;
+  primaryTextColor: string;
+  secondaryColor: string;
 }
 export interface DatePickerDialogInputData {
   disable: boolean;
   defaultDate: string;
   isChangeCalenderType: boolean;
-  theme:Theme
+  theme: Theme;
 }
 
 export interface DatePickerResult {
   result: string;
   isChangeCalenderType: boolean;
-  isToday:boolean;
+  isToday: boolean;
 }
 
 export interface Month {
@@ -35,7 +34,8 @@ export interface Season {
   providedIn: 'root',
 })
 export class NiraDatePickerService {
-  isTodaySubj: Subject<boolean> = new Subject<boolean>();
+
+  
   internalDate: Date;
 
   backToDataPickerDialog: Subject<boolean> = new Subject<boolean>();

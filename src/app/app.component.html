@@ -1,16 +1,24 @@
 <div class="date-picker-lib">
-  <mat-form-field
-    (click)="onShowCalendar()"
-    class="datepicker-form-field"
-    appearance="outline"
-    style="justify-content: center; margin-top: 10px"
-  >
-    <mat-label style="font-size: 15px">pick a date</mat-label>
-    <input
-      aria-label="Date Picker"
-      matInput
-      style="text-align: center; width: 85%; height: 24px; direction: ltr"
-    />
-  </mat-form-field>
-    <lib-nira-date-picker [isOpenCalender]="isOpenCalender" [label]="'pick a date'"></lib-nira-date-picker>
+  <form [formGroup]="datePickerFrmGrp">
+    <mat-form-field
+      (click)="onShowCalendar()"
+      class="datepicker-form-field"
+      appearance="outline"
+      style="justify-content: center; margin-top: 10px"
+    >
+      <mat-label style="font-size: 15px">pick a date</mat-label>
+      <input
+        aria-label="Date Picker"
+        matInput
+        formControlName="datePickerFrmCtrl"
+        style="text-align: center; width: 85%; height: 24px; direction: ltr"
+      />
+    </mat-form-field>
+  </form>
+  <lib-nira-date-picker
+    (isOpenCalenderChange)="isOpen = $event"
+    [(isOpenCalender)]="isOpen"
+    [defaultDate]="getDefaultDate()"
+    (datePickerResult)="getCalenderResult($event)"
+  ></lib-nira-date-picker>
 </div>

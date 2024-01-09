@@ -68,7 +68,7 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
     'بهمن',
     'اسفند',
   ];
-  currentShamsiDay: number = 0;
+
   value: string = '';
   loadingPrice: boolean = false;
   datePickerSub?: Subscription;
@@ -83,7 +83,7 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.theme = this.data.theme;
-    this.currentShamsiDay = this.m.jDate();
+
     this.yearFrmGrp = new FormGroup({
       yearFrmCtrl: new FormControl(null, Validators.required),
     });
@@ -225,7 +225,6 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
     }
   }
   goToToday() {
-    this.niraService.isTodaySubj.next(true);
     this.days = [];
     this.isToday = true;
 
@@ -248,19 +247,20 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
   }
 
   public getSelectedDay(day: number): boolean {
-    const currentDay = this.m.jDate();
-    const currentMonth = this.m.jMonth();
-    const currentYear = this.m.jYear();
+    // const currentDay = this.m.jDate();
+    // const currentMonth = this.m.jMonth();
+    // const currentYear = this.m.jYear();
+
     if (this.data.defaultDate) {
-      if (this.isToday) {
-        this.defaultDate = currentDay;
-      } else {
-        this.defaultDate = +this.data.defaultDate.substring(8);
-      }
+      const dateParts: string[] = this.data.defaultDate.split('-');
+      const defaultDay = +dateParts[2];
+      const defaultMonth = +dateParts[1] - 1;
+      const defaultYear = +dateParts[0];
+
       if (
-        this.defaultDate == day &&
-        this.month == currentMonth &&
-        this.year == currentYear
+        day == defaultDay &&
+        this.month == defaultMonth &&
+        this.year == defaultYear
       ) {
         return true;
       } else {
@@ -314,7 +314,6 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
   }
   public setDefaultValues() {
     let strdefaultDate: string = this.data.defaultDate;
-
     if (strdefaultDate != undefined && strdefaultDate.length > 8) {
       let dateParts: string[] = this.data.defaultDate.split('-');
       let strYear = dateParts[0];
@@ -324,7 +323,7 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
         this.value = new Date(this.value).toLocaleDateString();
         this.calendarType = 'en';
       } else {
-        this.niraService.setShamsiDateStr(this.value);
+        this.niraService.setShamsiDateStr(strdefaultDate);
         let miladiStr = this.niraService.getMiladiDateStr();
         this.m = moment(miladiStr);
         this.calendarType = 'fa';

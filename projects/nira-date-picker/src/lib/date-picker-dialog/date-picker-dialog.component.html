@@ -145,7 +145,6 @@
         'bigger-today': activeDay(day.toString()),
         'smaller-today': !activeDay(day.toString()),
         today: getCurrentDate(day),
-        isSelected: getSelectedDay(day),
         day: day != 0,
         disappearedDay: day == 0
       }"
@@ -164,7 +163,7 @@
     <button (click)="goToToday()" class="footer-btn">
       {{ calendarType == "en" ? "Today" : "امروز" }}
     </button>
-    <button class="footer-btn" (click)="changeCalendarType()">
+    <button disabled class="footer-btn" (click)="changeCalendarType()">
       {{ calendarType == "en" ? "Shamsi" : "میلادی" }}
     </button>
   </div>

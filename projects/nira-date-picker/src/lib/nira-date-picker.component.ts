@@ -2,11 +2,13 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import moment from 'jalali-moment';
@@ -27,21 +29,31 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./nira-date-picker.component.css'],
 })
 export class NiraDatePickerComponent
-  implements OnChanges, OnInit, AfterViewInit, OnDestroy
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
 {
-  @Input() isOpenCalender: boolean = false;
+  @Output() isOpenCalenderChange: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
   @Input() disable: boolean = false;
-  @Input() label: string = '';
-  @Input() defaultDate = '';
+
   @Input() changableYears: boolean = false;
   @Input() theme: Theme = {
     primaryColor: '#ff0000',
     primaryTextColor: 'white',
     secondaryColor: '#0000ff',
   };
+  @Input() defaultDate: string = '';
+  @Output() datePickerResult: EventEmitter<string> = new EventEmitter<string>();
   @ViewChild('decadeDialog') decadeDialog: any;
-
   @ViewChild('datePickerContainer')
+  isOpen: boolean = false;
+  @Input() get isOpenCalender() {
+    return this.isOpen;
+  }
+
+  set isOpenCalender(isOpen: boolean) {
+    this.isOpen = isOpen;
+    this.isOpenCalenderChange.emit(this.isOpen);
+  }
   datePickerContainer?: ElementRef<HTMLDivElement>;
   isTodaySub?: Subscription;
   result: string = '';
@@ -61,37 +73,22 @@ export class NiraDatePickerComponent
   showCalendar: boolean = false;
 
   backgroundBtnColor: string = 'red';
-  datePickerFrmGrp: FormGroup = {} as FormGroup;
+
   constructor(
     private matDialog: MatDialog,
     private niraService: NiraDatePickerService
   ) {}
-  ngOnChanges(): void { if (this.isOpenCalender) {
-    this.onShowCalendar();
-  }}
-  ngOnInit(): void {
-   
-    this.datePickerFrmGrp = new FormGroup({
-      datePickerFrmCtrl: new FormControl(null, Validators.required),
-    });
-    this.isTodaySub = this.niraService.isTodaySubj.subscribe(
-      (isToday: boolean) => {
-        if (isToday) {
-          const pad = (s: any) => (s.length < 2 ? 0 + s : s);
-          const currentDay = moment().jDate();
-          const currentMonth = moment().jMonth();
-          const currentYear = moment().jYear();
-          this.result = `${currentYear}-${pad(currentMonth + 1 + '')}-${pad(
-            currentDay + ''
-          )}`;
-          this.datePickerFrmGrp.setValue({
-            datePickerFrmCtrl: this.result,
-          });
-        }
-      }
-    );
-    this.backgroundBtnColor = 'green';
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.isOpen);
+    if (this.isOpen) {
+      this.onShowCalendar();
+    }
   }
+  ngOnInit(): void {
+
+  }
+
   ngAfterViewInit(): void {}
 
   public getCurrentMonthShamsi(): number {
@@ -117,13 +114,11 @@ export class NiraDatePickerComponent
     )}`;
   }
 
-  onShowCalendar() {
-    const defaultDate = this.datePickerFrmGrp.get('datePickerFrmCtrl')?.value;
-
+  private onShowCalendar() {
     let isChangeCalenderType: boolean = false;
     let dateDialogInputData: DatePickerDialogInputData = {
       disable: this.disable,
-      defaultDate: defaultDate,
+      defaultDate: this.defaultDate,
       isChangeCalenderType: isChangeCalenderType,
       theme: this.theme,
     };
@@ -133,15 +128,10 @@ export class NiraDatePickerComponent
       autoFocus: false,
     });
     datePickerDialogRef.afterClosed().subscribe((data: DatePickerResult) => {
+      this.isOpenCalender = false;
       if (data) {
-        if (data.isToday) {
-        } else {
-          this.result = data.result;
-          // this.result=this.result.replaceAll('-','/')
-          this.datePickerFrmGrp.setValue({
-            datePickerFrmCtrl: this.result,
-          });
-        }
+        this.result = data.result;
+        this.datePickerResult.emit(data.result);
       }
     });
   }
