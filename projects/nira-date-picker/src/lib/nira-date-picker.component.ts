@@ -21,7 +21,6 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { DatePickerDialogComponent } from './date-picker-dialog/date-picker-dialog.component';
 import { Subscription } from 'rxjs';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'lib-nira-date-picker',
@@ -31,17 +30,18 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class NiraDatePickerComponent
   implements OnInit, AfterViewInit, OnChanges, OnDestroy
 {
-  @Output() isOpenCalenderChange: EventEmitter<boolean> =
-    new EventEmitter<boolean>();
+  @Input() selectToday: boolean = false;
   @Input() disable: boolean = false;
-
   @Input() changableYears: boolean = false;
   @Input() theme: Theme = {
-    primaryColor: '#ff0000',
+    primaryColor: '#ff00ff',
     primaryTextColor: 'white',
     secondaryColor: '#0000ff',
   };
   @Input() defaultDate: string = '';
+  @Output() isOpenCalenderChange: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
+  @Output() todayDate: EventEmitter<string> = new EventEmitter<string>();
   @Output() datePickerResult: EventEmitter<string> = new EventEmitter<string>();
   @ViewChild('decadeDialog') decadeDialog: any;
   @ViewChild('datePickerContainer')
@@ -85,10 +85,28 @@ export class NiraDatePickerComponent
     }
   }
   ngOnInit(): void {
-
+    this.emitTodayDate();
   }
 
   ngAfterViewInit(): void {}
+
+  emitTodayDate() {
+    if (!this.defaultDate && this.selectToday) {
+      const currentDate = this.m.jDate();
+      const currentMonth = this.m.jMonth();
+      const currentYear = this.m.jYear();
+
+      const pad = (s: any) => (s.length < 2 ? 0 + s : s);
+
+      const today =
+        currentYear +
+        '-' +
+        pad((currentMonth + 1).toString()) +
+        '-' +
+        pad(currentDate.toString());
+      this.todayDate.emit(today);
+    }
+  }
 
   public getCurrentMonthShamsi(): number {
     let mon = this.niraService.getShamsiMon().valueOf();

@@ -74,6 +74,7 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
   datePickerSub?: Subscription;
   yearFrmGrp: FormGroup = {} as FormGroup;
   inputYearDialog: any;
+
   constructor(
     public datePickerDialogRef: MatDialogRef<DatePickerDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DatePickerDialogInputData,
@@ -83,9 +84,12 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.theme = this.data.theme;
-
     this.yearFrmGrp = new FormGroup({
-      yearFrmCtrl: new FormControl(null, Validators.required),
+      yearFrmCtrl: new FormControl(null, [
+        Validators.required,
+        Validators.min(1300),
+        Validators.max(1450),
+      ]),
     });
     this.setDefaultValues();
   }
@@ -96,10 +100,17 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
   }
   updateYearInDatePicker() {
     if (this.yearFrmGrp.get('yearFrmCtrl')?.valid) {
-      this.year = this.yearFrmGrp.get('yearFrmCtrl')?.value;
-      this.updateDays();
-      this.inputYearDialog.close();
-    }
+      const inputedYear = +this.yearFrmGrp.get('yearFrmCtrl')?.value;
+      if (inputedYear == this.year) {
+        this.inputYearDialog.close();
+        this.yearFrmGrp.reset();
+      } else {
+        this.year = inputedYear;
+        this.updateDays();
+        this.inputYearDialog.close();
+        this.yearFrmGrp.reset();
+      }
+    } 
   }
   goBeforeMonth() {
     if (this.month > 0) {
@@ -247,10 +258,6 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
   }
 
   public getSelectedDay(day: number): boolean {
-    // const currentDay = this.m.jDate();
-    // const currentMonth = this.m.jMonth();
-    // const currentYear = this.m.jYear();
-
     if (this.data.defaultDate) {
       const dateParts: string[] = this.data.defaultDate.split('-');
       const defaultDay = +dateParts[2];
@@ -386,14 +393,16 @@ export class DatePickerDialogComponent implements OnInit, OnDestroy {
         'اسفند',
       ];
     }
-
     this.updateMonth(undefined, 'today');
   }
   onChangeYear() {
     this.inputYearDialog = this.matDialog.open(this.yearDialog, {
       autoFocus: false,
-      minWidth: '25vw',
+      minWidth: '340px',
       height: '100px',
+    });
+    this.yearFrmGrp.setValue({
+      yearFrmCtrl: this.year,
     });
   }
 

@@ -27,6 +27,10 @@ export class AppComponent implements OnInit {
     return defaultDate;
   }
 
+  getToday(today: string) {
+  console.log(today)
+  }
+
   getCalenderResult(result: string) {
     this.datePickerFrmGrp.setValue({
       datePickerFrmCtrl: result,

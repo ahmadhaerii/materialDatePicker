@@ -6,9 +6,9 @@
   font-display: swap;
 }
 .colors {
-  --primary-color: red;
-  --primary-text-color: white;
-  --today-color: blue;
+  --primary-color: none;
+  --primary-text-color: none;
+  --today-color: none;
 }
 
 .header-month-arrow-icon {
@@ -54,15 +54,12 @@
   height: 45px;
   line-height: 45px;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .day:hover {
-  border: 1px solid;
   border-color: var(--primary-color) !important;
   border-radius: 5px;
-  width: 45px;
-  height: 45px;
-  cursor: pointer;
 }
 
 .disappeared-day {
@@ -102,36 +99,53 @@
   font-weight: 500;
 }
 .footer-btn:hover {
-  background-color: var(--primary-color);
-  color: var(--primary-text-color);
-  border-radius: 5px;
-  border: 2px solid;
-  width: 40%;
-  font-size: 16px;
-  padding: 5px;
-  padding-top: 8px;
-  margin: 5px;
+  background-color: var(--primary-color) !important;
+  color: var(--primary-text-color) !important;
 }
 .dp-footer {
   justify-content: center;
   text-align: center;
 }
 .set-year-btn {
-  font-size: 12px;
-  width: 100%;
+  font-size: smaller;
+  width: 100% !important;
   border-radius: 0px !important;
   font-weight: 600;
   font-family: Vazirmatn;
+  text-align: center !important;
+  line-height: 36px !important;
+  margin-top: 10px !important;
+  color: var(--primary-text-color);
+  background-color: var(--primary-color);
+}
+.set-year-btn:hover {
+  cursor: pointer;
+  box-shadow: 0px 0px 2px 0.25px var(--primary-color) !important;
+}
+
+.set-year-input-wrapper {
+  padding-inline: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .set-year-input {
-  padding-inline: 0;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  border-color: var(--primary-color) !important;
+  width: 100%;
+  padding-top: 5.5px;
+  padding-bottom: 5.5px;
+  outline: none;
+  border-radius: 0px !important;
+  line-height: inherit !important;
+  font-size: 14px;
+  font-weight: 500;
 }
-.set-year-btn-wrapper {
-  padding-inline: 0;
-  width: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
+.year-input-error-message {
+  direction: rtl;
+  color: red;
+  display: flex;
+  justify-content: end;
+  font-family: Vazirmatn;
+  font-weight: 500;
+  font-size: smaller;
 }

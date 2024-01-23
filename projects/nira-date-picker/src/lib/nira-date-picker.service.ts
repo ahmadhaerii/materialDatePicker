@@ -34,11 +34,11 @@ export interface Season {
   providedIn: 'root',
 })
 export class NiraDatePickerService {
-
-  
   internalDate: Date;
 
   backToDataPickerDialog: Subject<boolean> = new Subject<boolean>();
+
+  isYearErrorMessageSubj: Subject<boolean> = new Subject<boolean>();
 
   private seasons: Season[] = [
     {

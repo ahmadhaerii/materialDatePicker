@@ -5,7 +5,7 @@
     '--primary-text-color': theme.primaryTextColor,
     '--today-color': theme.secondaryColor
   }"
-  class="color"
+  class="colors"
 >
   <div class="row justify-content-space-between mb-3">
     <div class="col-3"></div>
@@ -54,7 +54,15 @@
     <div class="col-2"></div>
   </div>
   <ng-template #yearDialog>
-    <div style="overflow-x: hidden; overflow-y: hidden; user-select: none">
+    <div
+      class="colors"
+      [ngStyle]="{
+        '--primary-color': theme.primaryColor,
+        '--primary-text-color': theme.primaryTextColor,
+        '--today-color': theme.secondaryColor
+      }"
+      style="overflow-x: hidden; overflow-y: hidden; user-select: none"
+    >
       <form [formGroup]="yearFrmGrp">
         <div
           class="row justify-content-center"
@@ -64,32 +72,24 @@
             padding-inline-end: 20px;
           "
         >
-          <div class="col-6 text-center set-year-input">
+          <div class="col-7 text-center set-year-input-wrapper">
             <input
               formControlName="yearFrmCtrl"
-              style="
-                width: 100%;
-                padding-top: 6px;
-                padding-bottom: 6px;
-                outline: none;
-              "
-              [ngStyle]="{ borderColor: theme.primaryColor }"
+              class="set-year-input"
               matInput
               type="number"
             />
-          </div>
-          <div class="col-3 set-year-btn-wrapper">
-            <button
-              mat-raised-button
-              [ngStyle]="{
-                color: theme.primaryTextColor,
-                backgroundColor: theme.primaryColor
-              }"
-              (click)="updateYearInDatePicker()"
-              class="set-year-btn"
+            <div
+              *ngIf="!yearFrmGrp.get('yearFrmCtrl')?.valid"
+              class="year-input-error-message"
             >
+              از 1300 تا 1450 وارد کنید
+            </div>
+          </div>
+          <div class="col-3" style="padding: 0">
+            <div class="set-year-btn" (click)="updateYearInDatePicker()">
               برو به سال
-            </button>
+            </div>
           </div>
         </div>
       </form>

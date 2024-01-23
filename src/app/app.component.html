@@ -16,9 +16,11 @@
     </mat-form-field>
   </form>
   <lib-nira-date-picker
+    [selectToday]="true"
     (isOpenCalenderChange)="isOpen = $event"
     [(isOpenCalender)]="isOpen"
     [defaultDate]="getDefaultDate()"
     (datePickerResult)="getCalenderResult($event)"
+    (todayDate)="getToday($event)"
   ></lib-nira-date-picker>
 </div>
